@@ -36,7 +36,9 @@ target_link_libraries(${PROJECT_NAME_STR}
 #
 
 set(PROJECT_LIB_NAME ${PROJECT_NAME_STR}_lib)
-add_library(${PROJECT_LIB_NAME} STATIC ${SRC_LIST})
+set(LIB_SRC_LIST ${SRC_LIST})
+list(REMOVE_ITEM LIB_SRC_LIST "./main.cpp")
+add_library(${PROJECT_LIB_NAME} SHARED ${LIB_SRC_LIST})
 
 #
 #
