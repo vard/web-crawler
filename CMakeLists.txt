@@ -4,10 +4,10 @@ project(${PROJECT_NAME_STR})
 cmake_minimum_required(VERSION 2.8)
 
 # collect all sources form directory
-# aux_source_directory(. SRC_LIST)
+aux_source_directory(. SRC_LIST)
 
 # set main project source list
-set(SRC_LIST concurrent_set.cpp main.cpp)
+# set(SRC_LIST concurrent_set.cpp main.cpp)
 
 # set build type
 set( CMAKE_BUILD_TYPE DEBUG )
@@ -25,7 +25,7 @@ list( APPEND CMAKE_CXX_FLAGS "-std=c++0x ${CMAKE_CXX_FLAGS} -g -Wall -ftest-cove
 #
 
 set(PROJECT_LIB_NAME ${PROJECT_NAME_STR}_lib)
-add_library(${PROJECT_LIB_NAME} STATIC concurrent_set.cpp)
+add_library(${PROJECT_LIB_NAME} STATIC ${SRC_LIST})
 
 #
 #
@@ -43,7 +43,7 @@ include_directories(${PROJECT_SOURCE_DIR})
 set(PROJECT_TEST_NAME ${PROJECT_NAME_STR}_test)
 
 # generate list of files and store it in variable
-file(GLOB TEST_SRC_FILES ${PROJECT_SOURCE_DIR}/test/*.cpp)
+file(GLOB TEST_SRC_FILES ${PROJECT_SOURCE_DIR}/test/*.cpp ${PROJECT_SOURCE_DIR}/test/*.h)
 add_executable(${PROJECT_TEST_NAME} ${TEST_SRC_FILES})
 target_link_libraries(${PROJECT_TEST_NAME}
                       ${PROJECT_LIB_NAME}

@@ -12,14 +12,14 @@ template <typename T>
 class ConcurrentQueue : private boost::noncopyable
 {
     public:
-        typedef value_type T;
+        typedef T value_type;
 
         ConcurrentQueue() = default;
 
         void pop(value_type& item){
             std::unique_lock<std::mutex> mlock(mtx_);
             while(queue_.empty()){
-                cond_.wait(mtx_);
+                cond_.wait(mlock);
             }
             item = queue_.front();
             queue_.pop();
@@ -28,7 +28,7 @@ class ConcurrentQueue : private boost::noncopyable
         value_type pop(){
             std::unique_lock<std::mutex> mlock(mtx_);
             while(queue_.empty()){
-                cond_.wait(mtx_);
+                cond_.wait(mlock);
             }
             auto item = queue_.front();
             queue_.pop();
