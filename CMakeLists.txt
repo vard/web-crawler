@@ -18,6 +18,17 @@ add_executable(${PROJECT_NAME} ${SRC_LIST})
 # append compilation flags
 list( APPEND CMAKE_CXX_FLAGS "-std=c++0x ${CMAKE_CXX_FLAGS} -g -Wall -ftest-coverage")
 
+find_package(Boost COMPONENTS program_options-mt REQUIRED)
+if(NOT Boost_FOUND)
+    message(SEND_ERROR "Failed to find boost::program_options-mt.")
+    return()
+else()
+    include_directories(${Boost_INCLUDE_DIRS})
+endif()
+
+target_link_libraries(${PROJECT_NAME_STR}
+                                ${Boost_LIBRARIES})
+
 #
 #
 # LIBRARY FOR TESTING
