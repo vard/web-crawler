@@ -6,16 +6,20 @@
 using namespace std;
 namespace po = boost::program_options;
 
+typedef web_crawler::ConcurrentQueue<std::pait<std::string, uint32_t> URLQueue;
+
+
 int main(int argc, char** argv)
 {
     uint32_t crawlerLvl = 0;
+    std::string startUrl;
 
     // Declare the supported options.
     boost::program_options::options_description desc("Allowed options");
     desc.add_options()
         ("help,h", "produce help message")
         ("level,l", po::value<uint32_t>(&crawlerLvl)->default_value(10), "set crawler level")
-        ("source,s", po::value<std::string>(), "set crawler start url")
+        ("source,s", po::value<std::string>(&startUrl), "set crawler start url")
     ;
 
     po::positional_options_description p;
@@ -47,7 +51,9 @@ int main(int argc, char** argv)
         cout << "Source was not set.\n";
     }
 
-    cout << "Hello World!" << endl;
+    URLQueue urlQueue;
+    urlQueue.push(std::make_pair(startUrl, crawlerLvl));
+
     return 0;
 }
 
