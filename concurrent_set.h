@@ -7,7 +7,7 @@
 
 namespace web_crawler {
 
-template<typename T>
+template<typename T, typename Compare = std::less<T>>
 class ConcurrentSet
 {
     public:
@@ -34,7 +34,7 @@ class ConcurrentSet
 
 
     private:
-        std::set<T> set_;
+        std::set<T, Compare> set_;
         std::mutex lock_;
 };
 
