@@ -6,7 +6,7 @@
 using namespace std;
 namespace po = boost::program_options;
 
-typedef web_crawler::ConcurrentQueue<std::pait<std::string, uint32_t> URLQueue;
+typedef web_crawler::ConcurrentQueue<std::pair<std::string, uint32_t>> URLQueue;
 
 
 int main(int argc, char** argv)
@@ -53,6 +53,7 @@ int main(int argc, char** argv)
 
     URLQueue urlQueue;
     urlQueue.push(std::make_pair(startUrl, crawlerLvl));
+
 
     return 0;
 }
