@@ -6,28 +6,27 @@
 #include <condition_variable>
 #include "boost/noncopyable.hpp"
 
-namespace web_crawler{
+namespace web_crawler {
 
-template <typename T>
-class ConcurrentQueue : private boost::noncopyable
-{
+    template<typename T>
+    class ConcurrentQueue : private boost::noncopyable {
     public:
         typedef T value_type;
 
         ConcurrentQueue() = default;
 
-        void pop(value_type& item){
+        void pop(value_type &item) {
             std::unique_lock<std::mutex> mlock(mtx_);
-            while(queue_.empty()){
+            while (queue_.empty()) {
                 cond_.wait(mlock);
             }
             item = queue_.front();
             queue_.pop();
         }
 
-        value_type pop(){
+        value_type pop() {
             std::unique_lock<std::mutex> mlock(mtx_);
-            while(queue_.empty()){
+            while (queue_.empty()) {
                 cond_.wait(mlock);
             }
             auto item = queue_.front();
@@ -35,14 +34,14 @@ class ConcurrentQueue : private boost::noncopyable
             return item;
         }
 
-        void push(const value_type& item){
+        void push(const value_type &item) {
             std::unique_lock<std::mutex> mlock(mtx_);
             queue_.push(item);
             mlock.unlock();
             cond_.notify_one();
         }
 
-        void push(value_type&& item){
+        void push(value_type &&item) {
             std::unique_lock<std::mutex> mlock(mtx_);
             queue_.push(std::move(item));
             mlock.unlock();
@@ -53,8 +52,7 @@ class ConcurrentQueue : private boost::noncopyable
         std::queue<T> queue_;
         std::mutex mtx_;
         std::condition_variable cond_;
-
-};
+    };
 
 }
 

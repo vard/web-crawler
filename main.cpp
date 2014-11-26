@@ -1,12 +1,12 @@
 #include <iostream>
 #include <string>
+#include <thread>
 #include <concurrentqueue.h>
+#include <concurrent_set.h>
 #include "boost/program_options.hpp"
-
+#include "web_crawler.h"
 using namespace std;
 namespace po = boost::program_options;
-
-typedef web_crawler::ConcurrentQueue<std::pair<std::string, uint32_t>> URLQueue;
 
 
 int main(int argc, char** argv)
@@ -51,9 +51,12 @@ int main(int argc, char** argv)
         cout << "Source was not set.\n";
     }
 
-    URLQueue urlQueue;
-    urlQueue.push(std::make_pair(startUrl, crawlerLvl));
+    // create concurrent queue and set
 
+    std::cout << "hw concurrency: " << std::thread::hardware_concurrency() << std::endl;
+
+    web_crawler::WebCrawler webCrawler{startUrl, crawlerLvl};
+    webCrawler.doCrawl();
 
     return 0;
 }

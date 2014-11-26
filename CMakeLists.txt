@@ -1,13 +1,23 @@
-# set projcet name
+# set project name
 set(PROJECT_NAME_STR web_crawler)
 project(${PROJECT_NAME_STR})
 cmake_minimum_required(VERSION 2.8)
 
 # collect all sources form directory
-aux_source_directory(. SRC_LIST)
+# aux_source_directory(. SRC_LIST)
 
 # set main project source list
-# set(SRC_LIST concurrent_set.cpp main.cpp)
+set(SRC_LIST
+         concurrent_set.cpp
+         concurrent_set.h
+         main.cpp
+         url_handler.cpp
+         url_handler.h
+         concurrentqueue.cpp
+         concurrentqueue.h
+         web_crawler.cpp
+         web_crawler.h
+)
 
 # set build type
 set( CMAKE_BUILD_TYPE DEBUG )
@@ -16,7 +26,7 @@ set( CMAKE_BUILD_TYPE DEBUG )
 add_executable(${PROJECT_NAME} ${SRC_LIST})
 
 # append compilation flags
-list( APPEND CMAKE_CXX_FLAGS "-std=c++0x ${CMAKE_CXX_FLAGS} -g -Wall -ftest-coverage")
+list( APPEND CMAKE_CXX_FLAGS "-std=c++0x -std=c++1y ${CMAKE_CXX_FLAGS} -g -Wall -ftest-coverage")
 
 find_package(Boost COMPONENTS program_options-mt REQUIRED)
 if(NOT Boost_FOUND)
@@ -26,8 +36,10 @@ else()
     include_directories(${Boost_INCLUDE_DIRS})
 endif()
 
+set(Casablanca_LIBRARIES casablanca.dylib common_utilities.dylib)
 target_link_libraries(${PROJECT_NAME_STR}
-                                ${Boost_LIBRARIES})
+                                ${Boost_LIBRARIES}
+                                ${Casablanca_LIBRARIES})
 
 #
 #
@@ -39,6 +51,9 @@ set(PROJECT_LIB_NAME ${PROJECT_NAME_STR}_lib)
 set(LIB_SRC_LIST ${SRC_LIST})
 list(REMOVE_ITEM LIB_SRC_LIST "./main.cpp")
 add_library(${PROJECT_LIB_NAME} SHARED ${LIB_SRC_LIST})
+target_link_libraries(${PROJECT_LIB_NAME}
+                                 ${Boost_LIBRARIES}
+                                 ${Casablanca_LIBRARIES})
 
 #
 #
